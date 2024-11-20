@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+
+# Typescript compilation output
+dist/
+build/
+
+# Docker files
+.docker/
+
+# VSCode settings
+.vscode/
+
+# Logs
+*.log
+
