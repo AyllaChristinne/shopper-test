@@ -3,7 +3,7 @@ import "reflect-metadata";
 import cors from "cors";
 import "dotenv/config";
 
-import routes from "./routes/index.routes";
+import routes from "./index.routes";
 import "./shared/typeorm/data-source";
 import { PORT } from "./shared/consts";
 
