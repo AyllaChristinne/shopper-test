@@ -4,4 +4,5 @@ echo "Executando as migrations..."
 npx typeorm migration:run
 
 echo "Iniciando o servidor..."
-npm start
+# npm start
+npm run dev

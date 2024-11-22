@@ -26,13 +26,24 @@ async function createDatabase() {
     database: "postgres",
   });
 
-  console.log("Creating database...");
+  console.log("Checking if database exists...");
   try {
     await client.connect();
-    await client.query(`CREATE DATABASE ${DB_NAME}`);
-    console.log(`Database ${DB_NAME} created successfully!`);
+
+    const dbExists = await client.query(
+      `SELECT 1 FROM pg_database WHERE datname = $1`,
+      [DB_NAME]
+    );
+
+    if (dbExists.rowCount! > 0) {
+      console.log(`Database ${DB_NAME} already exists. Skipping creation...`);
+    } else {
+      console.log("Creating database...");
+      await client.query(`CREATE DATABASE ${DB_NAME}`);
+      console.log(`Database ${DB_NAME} created successfully!`);
+    }
   } catch (error) {
-    console.error("Error creating database", error);
+    console.error("Error checking or creating database", error);
   } finally {
     await client.end();
   }
