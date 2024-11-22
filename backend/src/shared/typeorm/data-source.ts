@@ -3,7 +3,7 @@ import { Client } from "pg";
 import { DataSource } from "typeorm";
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME } from "../consts";
 
-const AppDataSource = new DataSource({
+export const AppDataSource = new DataSource({
   type: "postgres",
   host: DB_HOST,
   port: DB_PORT,
@@ -12,7 +12,7 @@ const AppDataSource = new DataSource({
   database: DB_NAME,
   synchronize: true,
   logging: false,
-  entities: ["./src/modules/**/entities/*.ts"],
+  entities: ["./src/modules/**/*Entity.ts"],
   migrations: ["./src/shared/typeorm/migrations/*.ts"],
   subscribers: [],
 });
@@ -42,6 +42,9 @@ async function createDatabase() {
       await client.query(`CREATE DATABASE ${DB_NAME}`);
       console.log(`Database ${DB_NAME} created successfully!`);
     }
+
+    console.log("Ensuring 'uuid-ossp' extension is enabled...");
+    await client.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
   } catch (error) {
     console.error("Error checking or creating database", error);
   } finally {
