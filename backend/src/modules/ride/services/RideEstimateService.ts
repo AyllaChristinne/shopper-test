@@ -29,8 +29,6 @@ interface IDriverOption {
   value: number;
 }
 
-type TDriverData = IDriverOption & { minDistance: number };
-
 export class RideEstimateService {
   private async getRoute(
     origin: string,
