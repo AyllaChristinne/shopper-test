@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import { RideEstimateService } from "../services/RideEstimateService";
+
 import RequestError, { ErrorCodes } from "../../../shared/error/RequestError";
+import { RideEstimateService } from "../services/RideEstimateService";
+import { RideConfirmService } from "../services/RideConfirmService";
+import { RideRetrieveService } from "../services/RideRetrieveService";
+import { handleAsyncErrors } from "../../../shared/error/handleAsyncErrors";
 import {
   isValidDistanceForDriver,
   isValidDriverId,
 } from "../utils/driver.utils";
-import { RideConfirmService } from "../services/RideConfirmService";
-import { handleAsyncErrors } from "../../../shared/error/handleAsyncErrors";
 
 class RideController {
   public estimate = handleAsyncErrors(
@@ -39,8 +41,6 @@ class RideController {
         value,
       } = req.body;
 
-      console.log("driver", driver);
-
       if (!isValidDriverId(driver.id)) {
         return next(
           new RequestError(ErrorCodes.DRIVER_NOT_FOUND, "Invalid driver id")
@@ -70,6 +70,45 @@ class RideController {
         res.status(200).json({ success: true });
       } catch (err) {
         console.error("Error in estimate controller:", err);
+        return next(
+          new RequestError(ErrorCodes.INVALID_DATA, "Failed to estimate ride")
+        );
+      }
+    }
+  );
+
+  public retrieve = handleAsyncErrors(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const retrieveService = new RideRetrieveService();
+      const { customer_id } = req.params;
+      const driver_id = Number(req.query.driver_id);
+      let ridesHistory;
+
+      try {
+        if (!driver_id) {
+          ridesHistory = await retrieveService.listAll({ customer_id });
+        } else if (!isValidDriverId(driver_id)) {
+          return next(
+            new RequestError(ErrorCodes.INVALID_DRIVER, "Invalid driver id")
+          );
+        } else {
+          ridesHistory = await retrieveService.listByDriver({
+            customer_id,
+            driver_id,
+          });
+        }
+
+        if (!ridesHistory.length) {
+          return next(
+            new RequestError(
+              ErrorCodes.NO_RIDES_FOUND,
+              "No rides found for this customer"
+            )
+          );
+        }
+
+        res.status(200).json({ customer_id, rides: ridesHistory });
+      } catch (err) {
         return next(
           new RequestError(ErrorCodes.INVALID_DATA, "Failed to estimate ride")
         );

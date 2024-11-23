@@ -15,15 +15,15 @@ app.use(express.json());
 
 app.use(routes);
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  errorHandler(err, req, res, next);
-});
-
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({
     error_code: "ROUTE_NOT_FOUND",
     error_description: `Can't find ${req.originalUrl} on this server!`,
   });
+});
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  errorHandler(err, req, res, next);
 });
 
 app.listen(PORT, () => {
