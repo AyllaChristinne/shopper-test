@@ -1,33 +1,6 @@
-import "dotenv/config";
+import { IDriver, IRouteData } from "../types";
+import { getDriversOptions } from "../utils/driver.utils";
 const driversData = require("../../../data/drivers.json");
-
-interface ILocation {
-  latitude: number;
-  longitude: number;
-}
-
-interface IRouteData {
-  routes: Array<{
-    legs: Array<{
-      startLocation: ILocation;
-      endLocation: ILocation;
-    }>;
-    distanceMeters: number;
-    duration: string;
-  }>;
-}
-
-interface IDriverOption {
-  id: number;
-  name: string;
-  description: string;
-  vehicle: string;
-  review: {
-    rating: string;
-    comment: string;
-  };
-  value: number;
-}
 
 export class RideEstimateService {
   private async getRoute(
@@ -69,47 +42,43 @@ export class RideEstimateService {
     }
   }
 
-  private getDriversOptions(distance: number) {
-    const availableDrivers = (
-      driversData as Array<IDriverOption & { minDistance: number }>
-    ).filter((driver) => distance >= driver.minDistance);
-
-    const driverOptions = availableDrivers.map((driver) => ({
+  private formatResponse(
+    routeResponse: IRouteData,
+    driversOptions: Array<IDriver>
+  ) {
+    const availableDrivers = driversOptions.map((driver) => ({
       id: driver.id,
       name: driver.name,
       description: driver.description,
       vehicle: driver.vehicle,
       review: driver.review,
-      value: Math.round((distance / 1000) * driver.value * 100) / 100,
+      value:
+        Math.round(
+          (routeResponse.routes[0].distanceMeters / 1000) * driver.value * 100
+        ) / 100,
     }));
 
-    return driverOptions;
-  }
-
-  private formatResponse(
-    routeData: IRouteData,
-    driversOptions: Array<IDriverOption>
-  ) {
     return {
       origin: {
-        latitude: routeData.routes[0].legs[0].startLocation.latitude,
-        longitude: routeData.routes[0].legs[0].startLocation.longitude,
+        latitude: routeResponse.routes[0].legs[0].startLocation.latLng.latitude,
+        longitude:
+          routeResponse.routes[0].legs[0].startLocation.latLng.longitude,
       },
       destination: {
-        latitude: routeData.routes[0].legs[0].endLocation.latitude,
-        longitude: routeData.routes[0].legs[0].endLocation.longitude,
+        latitude: routeResponse.routes[0].legs[0].endLocation.latLng.latitude,
+        longitude: routeResponse.routes[0].legs[0].endLocation.latLng.longitude,
       },
-      distance: routeData.routes[0].distanceMeters,
-      duration: routeData.routes[0].duration,
-      options: driversOptions,
-      routeResponse: {},
+      distance: routeResponse.routes[0].distanceMeters,
+      duration: routeResponse.routes[0].duration,
+      options: availableDrivers,
+      routeResponse,
     };
   }
 
   public async estimate(origin: string, destination: string) {
     try {
       const routeData = await this.getRoute(origin, destination);
-      const driversOptions = this.getDriversOptions(
+      const driversOptions = getDriversOptions(
         routeData.routes[0].distanceMeters
       );
 

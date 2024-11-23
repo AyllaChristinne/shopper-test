@@ -1,14 +1,17 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import UserService from "../services/UserService";
+import { handleAsyncErrors } from "../../../shared/error/handleAsyncErrors";
 
 class UserController {
-  public async createOrLogin(request: Request, response: Response) {
-    const { email } = request.body;
-    const userService = new UserService();
-    const user = await userService.createOrLoginUser({ email });
+  public createOrLogin = handleAsyncErrors(
+    async (request: Request, response: Response, next: NextFunction) => {
+      const { email } = request.body;
+      const userService = new UserService();
+      const user = await userService.createOrLoginUser({ email });
 
-    response.json(user);
-  }
+      response.status(200).json(user);
+    }
+  );
 }
 
 export default UserController;

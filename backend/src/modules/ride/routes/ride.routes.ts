@@ -6,18 +6,14 @@ const routes = Router();
 const rideController = new RideController();
 
 const validateRideEstimateData = celebrate({
-  [Segments.BODY]: Joi.object()
-    .keys({
-      customer_id: Joi.string().uuid().required(),
-      origin: Joi.string().required(),
-      destination: Joi.string().required(),
-    })
-    .custom((value, helper) => {
-      if (value.origin === value.destination) {
-        return helper.error("Origin and destination must be different");
-      }
-      return value;
-    }),
+  [Segments.BODY]: Joi.object().keys({
+    customer_id: Joi.string().uuid().required(),
+    origin: Joi.string().required(),
+    destination: Joi.string()
+      .required()
+      .disallow(Joi.ref("origin"))
+      .messages({ "any.invalid": "destination cannot be the same as origin" }),
+  }),
 });
 
 const validateRideConfirmData = celebrate({
