@@ -9,7 +9,7 @@ routes.post(
   "/estimate",
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      customer_id: Joi.string().uuid().required(),
+      customer_id: Joi.string().required(),
       origin: Joi.string().required(),
       destination: Joi.string()
         .required()
@@ -25,7 +25,7 @@ routes.patch(
   "/confirm",
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      customer_id: Joi.string().uuid().required(),
+      customer_id: Joi.string().required(),
       origin: Joi.string().required(),
       destination: Joi.string().required(),
       distance: Joi.number().required(),
@@ -40,7 +40,7 @@ routes.get(
   "/:customer_id",
   celebrate({
     [Segments.PARAMS]: Joi.object().keys({
-      customer_id: Joi.string().uuid().required(),
+      customer_id: Joi.string().required(),
     }),
     [Segments.QUERY]: Joi.object().keys({
       driver_id: Joi.number().optional(),

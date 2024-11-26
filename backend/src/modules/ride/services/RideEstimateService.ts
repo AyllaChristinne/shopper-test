@@ -12,7 +12,7 @@ export class RideEstimateService {
       "Content-Type": "application/json",
       "X-Goog-Api-Key": process.env.GOOGLE_API_KEY || "",
       "X-Goog-FieldMask":
-        "routes.legs.startLocation,routes.legs.endLocation,routes.distanceMeters,routes.duration",
+        "routes.legs.startLocation,routes.legs.endLocation,routes.distanceMeters,routes.duration,routes.polyline.encodedPolyline",
     });
 
     try {
@@ -27,6 +27,7 @@ export class RideEstimateService {
             address: destination,
           },
           travelMode: "DRIVE",
+          polylineQuality: "OVERVIEW",
         }),
       });
 
@@ -71,7 +72,7 @@ export class RideEstimateService {
       distance: routeResponse.routes[0].distanceMeters,
       duration: routeResponse.routes[0].duration,
       options: availableDrivers,
-      routeResponse,
+      routeResponse: routeResponse.routes[0].polyline,
     };
   }
 

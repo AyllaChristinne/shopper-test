@@ -13,6 +13,9 @@ interface IRouteData {
     }>;
     distanceMeters: number;
     duration: string;
+    polyline: {
+      encodedPolyline: string;
+    };
   }>;
 }
 
