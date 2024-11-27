@@ -22,7 +22,7 @@ class DriverController {
       } catch (err) {
         console.error("Error getting drivers:", err);
         return next(
-          new RequestError(ErrorCodes.INVALID_DATA, "Error getting drivers")
+          new RequestError(ErrorCodes.INVALID_DATA, "Error ao buscar motorista")
         );
       }
     }

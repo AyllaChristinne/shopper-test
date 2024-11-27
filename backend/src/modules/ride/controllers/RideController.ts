@@ -22,7 +22,7 @@ class RideController {
       } catch (err) {
         console.error("Error in estimate controller:", err);
         return next(
-          new RequestError(ErrorCodes.INVALID_DATA, "Failed to estimate ride")
+          new RequestError(ErrorCodes.INVALID_DATA, "Erro ao solicitar viagem")
         );
       }
     }
@@ -48,7 +48,10 @@ class RideController {
 
       if (!isValidId) {
         return next(
-          new RequestError(ErrorCodes.DRIVER_NOT_FOUND, "Invalid driver id")
+          new RequestError(
+            ErrorCodes.DRIVER_NOT_FOUND,
+            "ID de motorista inválido"
+          )
         );
       }
 
@@ -56,7 +59,7 @@ class RideController {
         return next(
           new RequestError(
             ErrorCodes.INVALID_DISTANCE,
-            "Invalid distance for selected driver"
+            "Distância invalida para o motorista selecionado"
           )
         );
       }
@@ -76,7 +79,7 @@ class RideController {
       } catch (err) {
         console.error("Error in estimate controller:", err);
         return next(
-          new RequestError(ErrorCodes.INVALID_DATA, "Failed to estimate ride")
+          new RequestError(ErrorCodes.INVALID_DATA, "Erro ao solicitar viagem")
         );
       }
     }
@@ -95,7 +98,10 @@ class RideController {
           ridesHistory = await retrieveService.listAll({ customer_id });
         } else if (!isValidId) {
           return next(
-            new RequestError(ErrorCodes.INVALID_DRIVER, "Invalid driver id")
+            new RequestError(
+              ErrorCodes.INVALID_DRIVER,
+              "ID de motorista inválido"
+            )
           );
         } else {
           ridesHistory = await retrieveService.listByDriver({
@@ -108,7 +114,7 @@ class RideController {
           return next(
             new RequestError(
               ErrorCodes.NO_RIDES_FOUND,
-              "No rides found for this customer"
+              "Nenhuma corrida encontrada para esse usuário"
             )
           );
         }
@@ -116,7 +122,7 @@ class RideController {
         res.status(200).json({ customer_id, rides: ridesHistory });
       } catch (err) {
         return next(
-          new RequestError(ErrorCodes.INVALID_DATA, "Failed to estimate ride")
+          new RequestError(ErrorCodes.INVALID_DATA, "Erro ao solicitar viagem")
         );
       }
     }
