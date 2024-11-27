@@ -1,21 +1,6 @@
-import "reflect-metadata";
 import { Client } from "pg";
-import { DataSource } from "typeorm";
 import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME } from "../consts";
-
-export const AppDataSource = new DataSource({
-  type: "postgres",
-  host: DB_HOST,
-  port: DB_PORT,
-  username: DB_USERNAME,
-  password: DB_PASSWORD,
-  database: DB_NAME,
-  synchronize: false,
-  logging: false,
-  entities: ["./src/modules/**/*Entity.ts"],
-  migrations: ["./src/shared/typeorm/migrations/*.ts"],
-  subscribers: [],
-});
+import { AppDataSource } from "./data-source";
 
 async function createDatabase() {
   const client = new Client({
@@ -56,8 +41,6 @@ createDatabase().then(() => {
   AppDataSource.initialize()
     .then(() => {
       console.log("Data Source has been initialized!");
-      console.log("Running migrations... ");
-      AppDataSource.runMigrations();
     })
     .catch((err) => {
       console.error("Error during Data Source initialization", err);

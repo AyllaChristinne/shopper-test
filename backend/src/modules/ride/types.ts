@@ -29,7 +29,7 @@ interface IDriver {
     comment: string;
   };
   value: number;
-  minDistance: number;
+  mindistance: number;
 }
 
 type TRideData = {

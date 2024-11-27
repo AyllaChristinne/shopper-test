@@ -1,6 +1,5 @@
 import { IDriver, IRouteData } from "../types";
 import { getDriversOptions } from "../utils/driver.utils";
-const driversData = require("../../../data/drivers.json");
 
 export class RideEstimateService {
   private async getRoute(
@@ -79,7 +78,7 @@ export class RideEstimateService {
   public async estimate(origin: string, destination: string) {
     try {
       const routeData = await this.getRoute(origin, destination);
-      const driversOptions = getDriversOptions(
+      const driversOptions = await getDriversOptions(
         routeData.routes[0].distanceMeters
       );
 

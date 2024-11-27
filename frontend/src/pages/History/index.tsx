@@ -16,34 +16,6 @@ export const HistoryPage = () => {
   >({ id: 0, name: "Todos os motoristas" });
   const [rideHistory, setRideHistory] = useState<TRideHistory | null>(null);
 
-  /* const fetchRideHistoryData = async (
-    customer_id: string,
-    driver_id: number
-  ) => {
-    setIsLoading(true);
-
-    try {
-      const props =
-        driver_id !== 0 ? { customer_id, driver_id } : { customer_id };
-
-      const result = await fetchRideHistory(props);
-      console.log("result", result);
-
-      if (result.error_code) {
-        setError(result.error_description);
-        setRideHistory(null);
-        return;
-      }
-
-      setRideHistory(result.data.rides);
-    } catch (err) {
-      console.error("Erro inesperado:", err);
-      setError("Erro inesperado. Por favor, tente novamente.");
-    } finally {
-      setIsLoading(false);
-    }
-  }; */
-
   const fetchRideHistoryData = (customer_id: string, driver_id: number) => {
     setIsLoading(true);
 

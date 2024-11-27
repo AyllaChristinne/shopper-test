@@ -1,24 +1,28 @@
+import { DriverRetrieveService } from "../../driver/services/DriverRetrieveService";
 import { IDriver } from "../types";
-const drivers = require("../../../data/drivers.json");
 
-function getDriversOptions(distance: number) {
-  return (drivers as Array<IDriver>).filter(
-    (driver) => distance >= driver.minDistance
-  );
+async function getDrivers() {
+  const driverService = new DriverRetrieveService();
+  return await driverService.listAll();
 }
 
-function isValidDistanceForDriver(
-  driver_id: number,
-  distance: number
-): boolean {
+async function getDriversOptions(distance: number) {
+  const drivers = await getDrivers();
+  return drivers.filter((driver) => distance >= driver.mindistance);
+}
+
+async function isValidDistanceForDriver(driver_id: number, distance: number) {
+  const drivers = await getDrivers();
   const driver = drivers.find((driver: IDriver) => driver_id === driver.id);
   if (driver) {
-    return distance >= driver.minDistance;
+    return distance >= driver.mindistance;
   }
+
   return false;
 }
 
-function isValidDriverId(id: number): boolean {
+async function isValidDriverId(id: number) {
+  const drivers = await getDrivers();
   return (drivers as Array<IDriver>).some((driver) => driver.id === id);
 }
 

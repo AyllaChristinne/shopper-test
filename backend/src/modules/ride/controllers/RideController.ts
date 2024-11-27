@@ -40,14 +40,19 @@ class RideController {
         driver,
         value,
       } = req.body;
+      const isValidId = await isValidDriverId(driver.id);
+      const isValidDistance = await isValidDistanceForDriver(
+        driver.id,
+        distance
+      );
 
-      if (!isValidDriverId(driver.id)) {
+      if (!isValidId) {
         return next(
           new RequestError(ErrorCodes.DRIVER_NOT_FOUND, "Invalid driver id")
         );
       }
 
-      if (!isValidDistanceForDriver(driver.id, distance)) {
+      if (!isValidDistance) {
         return next(
           new RequestError(
             ErrorCodes.INVALID_DISTANCE,
@@ -82,12 +87,13 @@ class RideController {
       const retrieveService = new RideRetrieveService();
       const { customer_id } = req.params;
       const driver_id = Number(req.query.driver_id);
+      const isValidId = await isValidDriverId(driver_id);
       let ridesHistory;
 
       try {
         if (!driver_id) {
           ridesHistory = await retrieveService.listAll({ customer_id });
-        } else if (!isValidDriverId(driver_id)) {
+        } else if (!isValidId) {
           return next(
             new RequestError(ErrorCodes.INVALID_DRIVER, "Invalid driver id")
           );

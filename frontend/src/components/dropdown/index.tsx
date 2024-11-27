@@ -3,6 +3,7 @@ import styles from "./index.module.scss";
 import { useAppContext } from "context/AppContext";
 import { IDriver } from "types";
 import ArrowDown from "../../assets/down.png";
+import { fetchDrivers } from "services/fetchDrivers";
 
 type DropdownPropsType = {
   selectedDriver: Pick<IDriver, "id" | "name">;
@@ -15,26 +16,9 @@ export const Dropdown = ({
   selectedDriver,
   setSelectedDriver,
 }: DropdownPropsType) => {
-  const { setIsLoading } = useAppContext();
+  const { setIsLoading, setError } = useAppContext();
   const [isOpen, setIsOpen] = useState(false);
-  const drivers = [
-    {
-      id: 0,
-      name: "Todos",
-    },
-    {
-      id: 1,
-      name: "Homer Simpson",
-    },
-    {
-      id: 2,
-      name: "Dominic Toretto",
-    },
-    {
-      id: 3,
-      name: "James Bond",
-    },
-  ];
+  const [drivers, setDrivers] = useState([]);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
 
@@ -48,6 +32,21 @@ export const Dropdown = ({
     setSelectedDriver(driver);
     setIsLoading(false);
   };
+
+  const getAllDrivers = () => {
+    fetchDrivers()
+      .then((data) => {
+        setDrivers(data);
+      })
+      .catch((error) => {
+        console.error("Erro ao carregar motoristas:", error);
+        setError("Erro ao buscar motoristas");
+      });
+  };
+
+  useEffect(() => {
+    getAllDrivers();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -107,7 +106,7 @@ export const Dropdown = ({
           aria-label="Lista de motoristas"
           className={styles.dropdownList}
         >
-          {drivers.map((driver) => {
+          {drivers.map((driver: any) => {
             return (
               <li role="none" className={styles.dropdownItem} key={driver.id}>
                 <button
