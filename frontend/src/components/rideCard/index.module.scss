@@ -1,0 +1,26 @@
+.card {
+  border: 1px solid var(--elements-border);
+  border-radius: 8px;
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.cardBody:first-child {
+  margin-bottom: 4px;
+}
+
+.cardFooter {
+  color: var(--text-secondary);
+}

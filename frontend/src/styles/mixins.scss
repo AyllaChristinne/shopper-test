@@ -1,0 +1,9 @@
+$MD: "min-width: 767px";
+
+@mixin media($size) {
+  @if $size == "MD" {
+    @media (#{$MD}) {
+      @content;
+    }
+  }
+}

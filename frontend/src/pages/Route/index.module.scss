@@ -1,0 +1,115 @@
+@import "../../styles/mixins.scss";
+
+.driversSection,
+.driversSectionHeader,
+.driversSectionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.driversSection {
+  gap: 24px;
+}
+
+.driverContainer {
+  padding: 12px;
+  border: 1px solid var(--elements-border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.driverContainerHeader {
+  div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .driverName {
+    color: var(--text-primary);
+    font-size: 20px;
+  }
+
+  .driverRatingText {
+    font-weight: 600;
+  }
+
+  .driverRatingIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .driversSectionHeaderInfo {
+    color: var(--text-primary);
+    margin-top: 4px;
+  }
+}
+
+.driverDescription {
+  color: var(--text-secondary);
+}
+
+.driverContainerHeader,
+.driverContainerFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.driverVehicle {
+  font-size: 13px;
+  max-width: 60%;
+}
+
+.driverPrice {
+  font-weight: 600;
+  font-size: 18px;
+  width: fit-content;
+}
+
+.driverButton {
+  padding: 14px;
+  border-radius: 8px;
+  color: white;
+  background-color: var(--button-background);
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 12px;
+
+  &:hover {
+    background-color: var(--button-background-hover);
+    cursor: pointer;
+  }
+}
+
+@include media("MD") {
+  .driversSectionHeader,
+  .driversSectionContent {
+    flex-direction: row;
+  }
+  .driversSectionHeader {
+    justify-content: space-between;
+  }
+
+  .driversSectionHeaderTitle {
+    font-size: 28px;
+  }
+
+  .driversSectionHeaderInfo {
+    text-align: right;
+  }
+
+  .driversSectionContent {
+    align-items: stretch;
+    justify-content: space-between;
+  }
+
+  .driverContainer {
+    flex: 1;
+    justify-content: space-between;
+  }
+}

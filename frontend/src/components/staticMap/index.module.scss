@@ -1,0 +1,14 @@
+@import "../../styles/mixins.scss";
+
+.mapContainer {
+  width: calc(100vw - 16px);
+  left: -16px;
+  top: -16px;
+  height: 400px;
+}
+
+@include media("MD") {
+  .mapContainer {
+    width: 100vw;
+  }
+}

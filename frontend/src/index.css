@@ -1,0 +1,16 @@
+@import "./styles/colors.scss";
+
+body {
+  font-family: "Plus Jakarta Sans", serif, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  padding: 16px;
+  background-color: var(--page-background);
+}
+
+* {
+  font-family: "Plus Jakarta Sans", serif, sans-serif;
+  margin: 0;
+  user-select: none;
+}

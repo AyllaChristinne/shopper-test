@@ -8,8 +8,8 @@ import {
 
 @Entity("rides")
 class Ride {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryGeneratedColumn("increment")
+  id: number;
 
   @Column()
   customer_id: string;
